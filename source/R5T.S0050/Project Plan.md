@@ -12,3 +12,14 @@ Scripts for not creating local and remote code repositories (of the Git and GitH
 
 
 ## Prior Work
+
+
+
+## Design
+
+This works by using:
+
+* R5T.F0080.IRepositoryOperations.CreateRepository(
+	RepositoryContext,
+	Func{Task} setupRepository): Task{string}
+* Supplied with a repository setup closure supplied by GetRepositorySetup(Func{Task} setupSolution) method.
