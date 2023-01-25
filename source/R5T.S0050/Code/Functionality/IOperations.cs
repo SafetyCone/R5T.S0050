@@ -73,6 +73,40 @@ namespace R5T.S0050.Internal
     [FunctionalityMarker]
     public partial interface IOperations : IFunctionalityMarker
     {
+        async Task<CreateRepositoryResult> CreateRepository_RazorClassLibrary(
+            LibraryContext libraryContext,
+            string gitHubOwner,
+            bool isPrivate,
+            ILogger logger)
+        {
+            var repositoryContext = Instances.RepositoryContextOperations.GetRepositoryContext(
+                gitHubOwner,
+                libraryContext,
+                isPrivate);
+
+            var solutionRepositoryResult = await Instances.RepositoryOperations.CreateRepository(
+                libraryContext,
+                repositoryContext,
+                async repositoryResult =>
+                {
+                    var solutionResult = await F0087.SolutionOperations.Instance.NewSolution_RazorClassLibrary(
+                        libraryContext,
+                        repositoryContext.IsPrivate,
+                        repositoryContext.LocalDirectoryPath);
+
+                    var razorClassLibraryRepositoryResult = new CreateRepositoryResult
+                    {
+                        LocalRepositoryResult = repositoryResult,
+                        SolutionResult = solutionResult,
+                    };
+
+                    return razorClassLibraryRepositoryResult;
+                },
+                logger);
+
+            return solutionRepositoryResult;
+        }
+
         async Task<CreateRepositoryResult> CreateRepository_WinFormsApplication(
             LibraryContext libraryContext,
             string gitHubOwner,

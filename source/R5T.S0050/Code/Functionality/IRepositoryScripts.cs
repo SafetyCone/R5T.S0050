@@ -7,11 +7,42 @@ using R5T.F0093;
 using R5T.T0132;
 using R5T.T0153;
 
+
 namespace R5T.S0050
 {
 	[FunctionalityMarker]
 	public partial interface IRepositoryScripts : IFunctionalityMarker
 	{
+        /// <summary>
+        /// Creates a new repository containing a solution with a Razor Class Library project.
+        /// </summary>
+        public async Task New_RazorClassLibrary()
+        {
+            // Inputs.
+            var clearAnyExistingRepositoryForConstruction = true;
+            var libraryContext =
+                //Instances.LibraryContexts.Example
+                new LibraryContext
+                {
+                    LibraryName = "R5T.R0004",
+                    LibraryDescription = "Table of contents Razor Components."
+                }
+                ;
+            var owner =
+                Instances.GitHubOwners.SafetyCone
+                ;
+            var isPrivate = false;
+
+
+            /// Run.
+            await Operations.Instance.CreateRepository(
+                clearAnyExistingRepositoryForConstruction,
+                libraryContext,
+                owner,
+                isPrivate,
+                Internal.Operations.Instance.CreateRepository_RazorClassLibrary);
+        }
+
 		public async Task New_WinFormsApplication()
 		{
             /// Inputs.
